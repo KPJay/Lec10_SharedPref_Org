@@ -25,10 +25,13 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils;
 
 import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.KEY_BODY;
 import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.KEY_TITLE;
 import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.SHARED_PREF_FILENAME;
+import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.getfreeSpace;
+import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.loadNote;
 
 public class MainActivity extends AppCompatActivity
         implements TitlesFragment.OnFragmentInteractionListener{
@@ -84,42 +87,15 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     tv.setText(noteTitle.getText());
-
                     //save note
-                    try{
-                        FileOutputStream outputStream = openFileOutput(noteTitle.getText().toString().replace(" ",""), MODE_APPEND);
-                        outputStream.write(noteBody.getText().toString().getBytes());
-                        outputStream.close();
-                        Snackbar.make(view,"File Saved", Snackbar.LENGTH_INDEFINITE).show();
-                    }catch(Exception e){
+                    String outputMessage = Utils.saveNote(MainActivity.this,noteTitle.getText().toString().replace(" ",""),noteBody.getText().toString());
+                    Snackbar.make(view,outputMessage, Snackbar.LENGTH_INDEFINITE).show();
 
-                        Log.e("ERROR",e.getMessage() );
-                    }
                     //load note
-                    String tempStr = "";
-                    String lstOfFile_Str = "";
-                    ArrayList<String> listOfNotes = new ArrayList<>();
 
-                    File filesDir = getFilesDir();
-                    long x = filesDir.getFreeSpace()/1_000_000;//this in bytes converted to MB
-                    File[] filesList = filesDir.listFiles();
+                    String tempStr = loadNote(MainActivity.this, noteTitle.getText().toString());
 
-                    for(File fl:filesList) {
-                        listOfNotes.add(fl.getName());
-                    }
-                    try{
-                        FileInputStream inputStream = openFileInput(noteTitle.getText().toString().replace(" ",""));
-                        int c;
-                        while((c=inputStream.read())!=-1){
-                            tempStr+=Character.toString((char)c);
-                        }
-                        inputStream.close();
-
-                    }catch(Exception e){
-
-                        Log.e("ERROR",e.getMessage() );
-                    }
-                    tv.setText(tempStr + "\n Free space available is : " + x +" MB");
+                    tv.setText(tempStr + "\n Free space available is : " + getfreeSpace(MainActivity.this) +" MB");
 
                 }
             });

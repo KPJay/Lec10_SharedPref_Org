@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.getListFromFile;
 import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.getListFromSP;
+import static edu.montclair.mobilecomputing.m_alrajab.lec10_sharedpref_org.utils.Utils.loadNote;
 
 
 public class TitlesFragment extends Fragment {
@@ -29,6 +31,20 @@ public class TitlesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_titles, container, false);
         ListView ls=(ListView)view.findViewById(R.id.list_frg);
+
+        // Files implementation
+        ls.setAdapter(new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,
+                getListFromFile(getContext(),"Title_")));
+        ls.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mListener.onFragmentInteraction(loadNote(getContext(),adapterView.getSelectedItem().toString()));
+            }
+        });
+
+
+        /*
+        //Shared Preferences implementation
         ls.setAdapter(new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,
                 getListFromSP(getContext(),"Title_")));
         ls.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -37,6 +53,7 @@ public class TitlesFragment extends Fragment {
                 mListener.onFragmentInteraction(getListFromSP(getContext(),"Body_")[i]);
             }
         });
+        */
         return view;
     }
 
