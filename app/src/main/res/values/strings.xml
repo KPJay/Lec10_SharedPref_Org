@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lec10_SharedPref_Org</string>
+    <string name="blankFrag">hello_blank_fragment</string>
 </resources>

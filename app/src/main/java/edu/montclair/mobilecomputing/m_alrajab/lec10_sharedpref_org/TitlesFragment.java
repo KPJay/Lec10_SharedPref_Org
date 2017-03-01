@@ -30,15 +30,16 @@ public class TitlesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_titles, container, false);
-        ListView ls=(ListView)view.findViewById(R.id.list_frg);
+        final ListView ls=(ListView)view.findViewById(R.id.list_frg);
 
         // Files implementation
         ls.setAdapter(new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,
                 getListFromFile(getContext(),"Title_")));
+       // System.out.println(getListFromFile(getContext(),"Body_")[0]+"tetetet");
         ls.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mListener.onFragmentInteraction(loadNote(getContext(),adapterView.getSelectedItem().toString()));
+                mListener.onFragmentInteraction(getListFromFile(getContext(),"Body_")[i]);
             }
         });
 

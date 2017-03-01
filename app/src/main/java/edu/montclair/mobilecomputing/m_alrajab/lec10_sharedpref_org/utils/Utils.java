@@ -48,9 +48,10 @@ public class Utils  {
 
         for (File fl : filesList) {
             if(key.equals("Title_"))
-                listOfNotes.add(fl.getName());
-
-                     }
+                listOfNotes.add(fl.getName());//add title
+            else
+                listOfNotes.add(loadNote(context,fl.getName()));//add body
+        }
         return listOfNotes.toArray(new String[listOfNotes.size()]);
     }
 
